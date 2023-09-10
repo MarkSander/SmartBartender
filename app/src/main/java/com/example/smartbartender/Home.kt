@@ -1,10 +1,12 @@
 package com.example.smartbartender
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import androidx.lifecycle.ViewModelProvider
@@ -31,12 +33,15 @@ class Home(settings: Settings) : Fragment() {
 /*    private var param1: String? = null
     private var param2: String? = null*/
     private lateinit var simpleGrid: GridView
+    lateinit var courseGRV: GridView
+    lateinit var courseList: List<GridViewModal>
     private val drinksViewModel by lazy {
         ViewModelProvider(requireActivity()).get(DrinksViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 /*        arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -47,21 +52,24 @@ class Home(settings: Settings) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        //val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.cocktail_gridview, container, false)
 
-/*        val sendRequestButton = view.findViewById<Button>(R.id.recycleView.rowButton)
-        sendRequestButton.setOnClickListener {
-            // Handle button click and send the request here
-            sendHttpRequestAsync()
-        }*/
+
+        /*        val sendRequestButton = view.findViewById<Button>(R.id.recycleView.rowButton)
+                sendRequestButton.setOnClickListener {
+                    // Handle button click and send the request here
+                    sendHttpRequestAsync()
+                }*/
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        simpleGrid = view.findViewById(R.id.simpleGridView)
         val coroutineScope = CoroutineScope(Dispatchers.Main)
+
 
         coroutineScope.launch {
             // Manually create instances of drinks
@@ -92,7 +100,7 @@ class Home(settings: Settings) : Fragment() {
                 // Add other drinks here...
             )
 
-            val itemAdapter = Adapter(drinksList)
+            //val itemAdapter = Adapter(drinksList)
 /*                // Handle item click here, for example, navigate to the detail view
                 val detailFragment = DrinkDetailFragment.newInstance(clickedDrink)
                 requireActivity().supportFragmentManager.beginTransaction()
@@ -101,10 +109,26 @@ class Home(settings: Settings) : Fragment() {
                     .commit()
             }*/
 
-            val recyclerView: RecyclerView = view.findViewById(R.id.recycleView)
+/*            val recyclerView: RecyclerView = view.findViewById(R.id.recycleView)
             recyclerView.layoutManager = LinearLayoutManager(context)
 
-            recyclerView.adapter = itemAdapter
+            recyclerView.adapter = itemAdapter*/
+
+
+            val customAdapter = CustomAdapter(requireContext(), drinksList)
+            simpleGrid.adapter = customAdapter
+
+            // implement setOnItemClickListener event on GridView
+            simpleGrid.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, position, _ ->
+                // Handle item click here, for example, navigate to the detail view
+                val clickedDrink = drinksList[position]
+                val clickedDrinkIngredients = clickedDrink.ingredients
+                val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
+                intent.putExtra("drinkName", clickedDrink.name)
+                intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
+                intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
+                startActivity(intent)
+            })
         }
     }
 
