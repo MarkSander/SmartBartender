@@ -10,7 +10,7 @@ class AmarettoSour : CocktailInterface {
     override val imageResourceId = R.drawable.amarettosour
     init {
         ingredients["Amaretto"] = 45
-        ingredients["whisky"] = 15
+        ingredients["Whisky"] = 15
         extraIngredients["Lemon"] = 1
         extraIngredients["Ice"] = 6
     }

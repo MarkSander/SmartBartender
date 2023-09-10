@@ -1,11 +1,13 @@
 package com.example.smartbartender
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class DrinksViewModel: ViewModel() {
     //var inputDrinks: List<String> = emptyList()
-    var drinkInput1 = "Empty"
-    var drinkInput2 = "Empty"
-    var drinkInput3 = "Empty"
-    var drinkInput4 = "Empty"
+    val drinkInput1 = MutableLiveData<String>().apply { value = "Empty" }
+    val drinkInput2 = MutableLiveData<String>().apply { value = "Empty" }
+    val drinkInput3 = MutableLiveData<String>().apply { value = "Empty" }
+    val drinkInput4 = MutableLiveData<String>().apply { value = "Empty" }
+
 }

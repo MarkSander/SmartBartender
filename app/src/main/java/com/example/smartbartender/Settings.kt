@@ -1,6 +1,7 @@
 package com.example.smartbartender
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private val inputDrinks = listOf("Empty", "Whiskey", "Rum", "Gin", "Pure ethanol", "Vodka")
+private val inputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amaretto", "Vodka")
 private var selectedDrinkPosition1 = 0 // Default to the first item
 private var selectedDrinkPosition2 = 0 // Default to the first item
 private var selectedDrinkPosition3 = 0 // Default to the first item
@@ -40,8 +41,20 @@ class Settings : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private val drinksViewModel by lazy {
+    // Access appPreferences in your fragment using requireContext()
+    private lateinit var appPreferences: AppPreferences
+
+
+    /*    private val drinksViewModel by lazy {
         ViewModelProvider(requireActivity()).get(DrinksViewModel::class.java)
+    }*/
+    //var drinksViewModel = ViewModelProvider(requireActivity()).get(DrinksViewModel::class.java)
+    private lateinit var drinksViewModel: DrinksViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Access appPreferences once the fragment is attached
+        appPreferences = (requireContext().applicationContext as MyApplication).appPreferences
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +70,14 @@ class Settings : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        //return inflater.inflate(R.layout.fragment_settings, container, false)
+        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        drinksViewModel = ViewModelProvider(requireActivity()).get(DrinksViewModel::class.java) // Initialize here
+
+        // ... (rest of your code)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +87,7 @@ class Settings : Fragment() {
         val spinnerDrinks2: Spinner = view.findViewById(R.id.drinkInputSpinner2)
         val spinnerDrinks3: Spinner = view.findViewById(R.id.drinkInputSpinner3)
         val spinnerDrinks4: Spinner = view.findViewById(R.id.drinkInputSpinner4)
-
+        val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
 
         spinnerDrinks1?.let { spinner ->
             val adapter = ArrayAdapter(
@@ -91,7 +111,9 @@ class Settings : Fragment() {
                 ) {
                     selectedDrinkPosition1 = position
                     drinkInput1 = inputDrinks[position]
-                    drinksViewModel.drinkInput1 = drinkInput1
+                    appPreferences.saveDrinkInput("drinkInput1", drinkInput1)
+                    //drinksViewModel.drinkInput1.value = drinkInput1
+                    Log.d("SettingsFragment", "drinkInput1 updated to: ${appPreferences.getDrinkInput("drinkInput1", "Empty")}")
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -122,7 +144,8 @@ class Settings : Fragment() {
                 ) {
                     selectedDrinkPosition2 = position
                     drinkInput2 = inputDrinks[position]
-                    drinksViewModel.drinkInput2 = drinkInput2
+                    appPreferences.saveDrinkInput("drinkInput2", drinkInput2)
+                    //drinksViewModel.drinkInput2.value = drinkInput2
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -153,7 +176,8 @@ class Settings : Fragment() {
                 ) {
                     selectedDrinkPosition3 = position
                     drinkInput3 = inputDrinks[position]
-                    drinksViewModel.drinkInput3 = drinkInput3
+                    appPreferences.saveDrinkInput("drinkInput3", drinkInput3)
+                    //drinksViewModel.drinkInput3.value = drinkInput3
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -184,7 +208,8 @@ class Settings : Fragment() {
                 ) {
                     selectedDrinkPosition4 = position
                     drinkInput4 = inputDrinks[position]
-                    drinksViewModel.drinkInput4 = drinkInput4
+                    appPreferences.saveDrinkInput("drinkInput4", drinkInput4)
+                    //drinksViewModel.drinkInput4.value = drinkInput4
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
