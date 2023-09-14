@@ -2,6 +2,7 @@ package com.example.smartbartender
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,11 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
+
 
 import java.io.File
 /*
@@ -33,11 +40,19 @@ class Home(settings: Settings) : Fragment() {
 /*    private var param1: String? = null
     private var param2: String? = null*/
     private lateinit var simpleGrid: GridView
+    private lateinit var simpleCustomCocktailGrid: GridView
+    private lateinit var emptyGridText: TextView
     lateinit var courseGRV: GridView
     lateinit var courseList: List<GridViewModal>
-    private val drinksViewModel by lazy {
-        ViewModelProvider(requireActivity()).get(DrinksViewModel::class.java)
+    private var input1 = "Empty"
+    private var input2 = "Empty"
+    private var input3 = "Empty"
+    private var input4 = "Empty"
+    private val cocktailViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(CocktailViewModel::class.java)
     }
+    //val cocktailViewModel: CocktailViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +83,8 @@ class Home(settings: Settings) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         simpleGrid = view.findViewById(R.id.simpleGridView)
+        simpleCustomCocktailGrid = view.findViewById(R.id.simpleCustomCocktailGridView)
+        emptyGridText = view.findViewById(R.id.empty_state_message)
         val coroutineScope = CoroutineScope(Dispatchers.Main)
 
 
@@ -99,82 +116,73 @@ class Home(settings: Settings) : Fragment() {
                 WhiskySour()
                 // Add other drinks here...
             )
+            input1 = "Empty"
+            input2 = "Empty"
+            input3 = "Empty"
+            input4 = "Empty"
 
-            //val itemAdapter = Adapter(drinksList)
-/*                // Handle item click here, for example, navigate to the detail view
-                val detailFragment = DrinkDetailFragment.newInstance(clickedDrink)
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.detail_fragment, detailFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }*/
+            val filteredCocktailList: MutableList<CocktailInterface> = mutableListOf()
+            for (cocktail in drinksList){
+                val ingredients = cocktail.ingredients.keys.toList()
+                var canBeAdded = true
+                for(ing in ingredients){
+                    if (ing == input1 || ing == input2 || ing == input3 || ing == input4){
+                        Log.d("FilterCocktail", "The ingredient $ing was found in the inputs")
+                    } else {
+                        canBeAdded = false
+                    }
+                }
+                if (canBeAdded){
+                    filteredCocktailList.add(cocktail)
+                    Log.d("Cocktail filtered", "New Cocktail added to filterred list: $cocktail List now contais: $filteredCocktailList")
+                }
+            }
 
-/*            val recyclerView: RecyclerView = view.findViewById(R.id.recycleView)
-            recyclerView.layoutManager = LinearLayoutManager(context)
-
-            recyclerView.adapter = itemAdapter*/
-
-
-            val customAdapter = CustomAdapter(requireContext(), drinksList)
-            simpleGrid.adapter = customAdapter
+            val customMadeDrinks = cocktailViewModel.cocktailList.toList()
+            if(filteredCocktailList.isEmpty() && customMadeDrinks.isEmpty()){
+                simpleGrid.visibility = View.GONE
+                emptyGridText.visibility = View.VISIBLE
+            } else{
+                simpleGrid.visibility = View.VISIBLE
+                emptyGridText.visibility = View.GONE
+                val customAdapter = CustomAdapter(requireContext(), filteredCocktailList)
+                simpleGrid.adapter = customAdapter
+            }
+            Log.d("CocktailViewmodel", "Cocktailviewmodel List constains the following in the home view: ${cocktailViewModel.cocktailList}")
+            val customMadeCocktailAdapter = CustomAdapter(requireContext(), customMadeDrinks)
+            simpleCustomCocktailGrid.adapter = customMadeCocktailAdapter
 
             // implement setOnItemClickListener event on GridView
             simpleGrid.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, position, _ ->
                 // Handle item click here, for example, navigate to the detail view
-                val clickedDrink = drinksList[position]
+                val clickedDrink = filteredCocktailList[position]
                 val clickedDrinkIngredients = clickedDrink.ingredients
+                val clickedDrinkExtraIngredients = clickedDrink.extraIngredients
                 val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
+
                 intent.putExtra("drinkName", clickedDrink.name)
                 intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
                 intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
+                intent.putExtra("extraIngredients", HashMap(clickedDrinkExtraIngredients))
+                //startActivity(intent, options.toBundle())
+                startActivity(intent)
+            })
+            simpleCustomCocktailGrid.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, position, _ ->
+                // Handle item click here, for example, navigate to the detail view
+                val clickedDrink = customMadeDrinks[position]
+                val clickedDrinkIngredients = clickedDrink.ingredients
+                val clickedDrinkExtraIngredients = clickedDrink.extraIngredients
+                val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
+
+                intent.putExtra("drinkName", clickedDrink.name)
+                intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
+                intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
+                intent.putExtra("extraIngredients", HashMap(clickedDrinkExtraIngredients))
+                //startActivity(intent, options.toBundle())
                 startActivity(intent)
             })
         }
     }
-
-    /*    companion object {
-            @JvmStatic
-            fun newInstance(param1: String, param2: String) =
-                Home(settings).apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-        }*/
-
-/*    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-
-        coroutineScope.launch {
-            val drinksList = withContext(Dispatchers.IO) {
-                //TODO: url parameters meegeven in getDrinksData()
-                var inputString = "Vodka"
-                if (drinksViewModel.drinkInput1 != "Empty"){
-                    inputString = drinkInput1
-                }
-                if (drinksViewModel.drinkInput2 != "Empty"){
-                    inputString = "$inputString, $drinkInput2"
-                }
-                if (drinksViewModel.drinkInput3 != "Empty"){
-                    inputString = "$inputString, $drinkInput3"
-                }
-                if (drinksViewModel.drinkInput4 != "Empty"){
-                    inputString = "$inputString, $drinkInput4"
-                }
-                Constants.getDrinksData(inputString)
-            }
-
-            val itemAdapter = Adapter(drinksList)
-
-            val recyclerView: RecyclerView = view.findViewById(R.id.recycleView)
-            recyclerView.layoutManager = LinearLayoutManager(context)
-
-            recyclerView.adapter = itemAdapter
-        }
-    }*/
 
     private fun sendHttpRequestAsync() {
         val url = "http://192.168.234.144:5000/pump1"

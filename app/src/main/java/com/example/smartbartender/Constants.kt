@@ -23,13 +23,6 @@ object Constants {
         val responseStream: InputStream = connection.inputStream
         val jsonConfig = Json { ignoreUnknownKeys = true}
         val apiResponse: List<CocktailApiResponse> = jsonConfig.decodeFromString(responseStream.reader().readText())
-        for (cocktailApiResponse in apiResponse) {
-            val name = cocktailApiResponse.name
-            val ingredients = cocktailApiResponse.ingredients
-
-            val cocktail = Cocktail(name, ingredients)
-            drinksList.add(cocktail)
-        }
 
         drinksList
     }

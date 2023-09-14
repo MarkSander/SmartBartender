@@ -1,12 +1,16 @@
 package com.example.smartbartender
 
+import android.os.Build
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
+import android.view.Window
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.smartbartender.GridViewModal
@@ -26,6 +30,10 @@ class DrinkDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val transition = TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform)
+            window.sharedElementEnterTransition = transition
+        }
         setContentView(R.layout.detail_fragment)
         appPreferences = (applicationContext as MyApplication).appPreferences
         drinksViewModel = ViewModelProvider(this).get(DrinksViewModel::class.java)
@@ -37,26 +45,11 @@ class DrinkDetailActivity : AppCompatActivity() {
         val pump3 = appPreferences.getDrinkInput("drinkInput3", "Empty")
         val pump4 = appPreferences.getDrinkInput("drinkInput4", "Empty")
 
-
-/*        drinksViewModel = ViewModelProvider(this).get(DrinksViewModel::class.java)
-
-        // Observe LiveData properties for changes
-        drinksViewModel.drinkInput1.observe(this, Observer { newValue ->
-            pump1 = newValue
-        })
-        drinksViewModel.drinkInput2.observe(this, Observer { newValue ->
-            pump2 = newValue
-        })
-        drinksViewModel.drinkInput3.observe(this, Observer { newValue ->
-            pump3 = newValue
-        })
-        drinksViewModel.drinkInput4.observe(this, Observer { newValue ->
-            pump4 = newValue
-        })*/
         // Retrieve the drink information from the intent
         val drinkName = intent.getStringExtra("drinkName")
         val drinkImageResource = intent.getIntExtra("drinkImageResource", 0)
         val drinkIngredients = intent.getSerializableExtra("drinkIngredients") as? MutableMap<String, Int>
+        val extraIngredients = intent.getSerializableExtra("extraIngredients") as? MutableMap<String, Int>
 
 // Now you have the individual data points to populate your UI components
 
@@ -90,7 +83,7 @@ class DrinkDetailActivity : AppCompatActivity() {
 
                 Log.i("Info", "Request being send to pump api localhost/$pump1Value/$pump2Value/$pump3Value/$pump4Value")
                 //TODO Decomment below if connected to rasberry
-                /*val result = sendHttpRequestAsync(pump1Value, pump2Value, pump3Value, pump4Value)
+                val result = sendHttpRequestAsync(pump1Value, pump2Value, pump3Value, pump4Value)
 
                 // Check if the result contains "Finished"
                 if (result == "Finished") {
@@ -101,7 +94,7 @@ class DrinkDetailActivity : AppCompatActivity() {
                     // Example: withContext(Dispatchers.Main) { updateUI() }
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
-                }*/
+                }
             }
         }
         val ingredientsText = StringBuilder()
@@ -114,12 +107,27 @@ class DrinkDetailActivity : AppCompatActivity() {
         } else{
             ingredientsText.append("No Ingredients found")
         }
+        val extraIngredientsText = StringBuilder()
+        extraIngredientsText.append("Extra Ingredients:\n")
+        if(extraIngredients != null){
+            // Iterate through the map and concatenate the values
+            for ((ingredientName, ingredientValue) in extraIngredients) {
+                extraIngredientsText.append("$ingredientName\n")
+            }
+        } else{
+            extraIngredientsText.append("No extra ingredients")
+        }
+
+        val sharedImageView = findViewById<ImageView>(R.id.drinkImage)
+        ViewCompat.setTransitionName(sharedImageView, "drinkImageTransition")
 
         // Populate UI components with drink information
         drinkImageView.setImageResource(drinkImageResource)
         drinkNameView.text = drinkName
         val textView = findViewById<TextView>(R.id.drinkIngredients)
         textView.text = ingredientsText.toString()
+        val extraTextView = findViewById<TextView>(R.id.extraDrinkIngredients)
+        extraTextView.text = extraIngredientsText.toString()
 
         // Add more code to populate other UI components with additional drink details
     }

@@ -6,7 +6,7 @@ import com.example.smartbartender.R
 class Screwdriver : CocktailInterface {
     override val name: String = "Screwdriver"
     override val ingredients: MutableMap<String, Int> = HashMap()
-    val extraIngredients: MutableMap<String, Int> = HashMap()
+    override val extraIngredients: MutableMap<String, Int> = HashMap()
     override val imageResourceId = R.drawable.screwdriver
     init {
         ingredients["Orange Juice"] = 100

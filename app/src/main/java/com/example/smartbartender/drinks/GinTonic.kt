@@ -6,7 +6,7 @@ import com.example.smartbartender.R
 class GinTonic : CocktailInterface {
     override val name: String = "Gin Tonic"
     override val ingredients: MutableMap<String, Int> = HashMap()
-    val extraIngredients: MutableMap<String, Int> = HashMap()
+    override val extraIngredients: MutableMap<String, Int> = HashMap()
     override val imageResourceId = R.drawable.gintonic
     init {
         ingredients["Gin"] = 45

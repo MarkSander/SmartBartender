@@ -18,6 +18,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pump1: "/>
         <Spinner
             android:id="@+id/drinkInputSpinner1"
             android:layout_width="160dp"
@@ -26,32 +34,98 @@
             android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp" />
-
-        <Spinner
-            android:id="@+id/drinkInputSpinner2"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
-        <Spinner
-            android:id="@+id/drinkInputSpinner3"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
-
-        <Spinner
-            android:id="@+id/drinkInputSpinner4"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+        <Button
+            android:id="@+id/flush1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flush"/>
+        <Button
+            android:id="@+id/fill1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fill"/>
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pump2: "/>
+            <Spinner
+                android:id="@+id/drinkInputSpinner2"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+            <Button
+                android:id="@+id/flush2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flush"/>
+            <Button
+                android:id="@+id/fill2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fill"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pump3: "/>
+            <Spinner
+                android:id="@+id/drinkInputSpinner3"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+            <Button
+                android:id="@+id/flush3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flush"/>
+            <Button
+                android:id="@+id/fill3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fill"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pump4: "/>
+            <Spinner
+                android:id="@+id/drinkInputSpinner4"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+            <Button
+                android:id="@+id/flush4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flush"/>
+            <Button
+                android:id="@+id/fill4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fill"/>
+        </LinearLayout>
 
     </LinearLayout>
 

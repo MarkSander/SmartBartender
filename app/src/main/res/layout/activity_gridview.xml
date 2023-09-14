@@ -26,7 +26,8 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/defaultdrinkimage" />
+            android:src="@drawable/defaultdrinkimage"
+            android:transitionName="drinkImageTransition"/>
 
         <!--on below line we are creating
             a simple text view-->

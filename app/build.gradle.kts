@@ -48,11 +48,12 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.7.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
     implementation("androidx.fragment:fragment-ktx:1.6.1") // Check for the latest version
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1") // Replace with the latest version
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2") // Replace with the latest version 2.6.1
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")

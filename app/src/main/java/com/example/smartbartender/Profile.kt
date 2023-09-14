@@ -1,6 +1,7 @@
 package com.example.smartbartender
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,9 +21,7 @@ import okhttp3.Request
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-private val inputDrinks = listOf("Empty", "Whiskey", "Rum", "Gin", "Pure ethanol", "Vodka")
+private val inputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amarreto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
 
 /**
  * A simple [Fragment] subclass.
@@ -29,15 +30,16 @@ private val inputDrinks = listOf("Empty", "Whiskey", "Rum", "Gin", "Pure ethanol
  */
 class Profile : Fragment(){
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var cocktailNameEditText: EditText
+    private lateinit var ingredientsEditText: EditText
+    private lateinit var extraIngredientsEditText: EditText
+    private lateinit var createCocktailButton: Button
+    //val cocktailViewModel: CocktailViewModel by viewModels()
+    private lateinit var cocktailViewModel: CocktailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -45,11 +47,40 @@ class Profile : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_addcocktail, container, false)
+        val drinkName = view.findViewById<EditText>(R.id.drinkTitleInput)
+        val amount1 = view.findViewById<EditText>(R.id.ingredient1Amount)
+        val amount2 = view.findViewById<EditText>(R.id.ingredient2Amount)
+        val amount3 = view.findViewById<EditText>(R.id.ingredient3Amount)
+        val amount4 = view.findViewById<EditText>(R.id.ingredient4Amount)
+        amount1.filters = arrayOf(InputFilterMinMax("0", "200"))
+        amount2.filters = arrayOf(InputFilterMinMax("0", "200"))
+        amount3.filters = arrayOf(InputFilterMinMax("0", "200"))
+        amount4.filters = arrayOf(InputFilterMinMax("0", "200"))
+        amount1.setText("0")
+        amount2.setText("0")
+        amount3.setText("0")
+        amount4.setText("0")
+
+        cocktailViewModel = ViewModelProvider(requireActivity()).get(CocktailViewModel::class.java)
 
         val sendRequestButton = view.findViewById<Button>(R.id.addConfirmButton)
         sendRequestButton.setOnClickListener {
             // Handle button click and send the request here
-            addNewCocktail()
+            val ingredients: MutableMap<String, Int> = HashMap()
+            val extraIngredients: MutableMap<String, Int> = HashMap()
+            val am1: String = amount1.text.toString()
+            val am2: String = amount2.text.toString()
+            val am3: String = amount3.text.toString()
+            val am4: String = amount4.text.toString()
+            Log.d("Drink input", "Drink input1: $drinkInput1")
+            ingredients[drinkInput1] = Integer.parseInt(am1)
+            ingredients[drinkInput2] = Integer.parseInt(am2)
+            ingredients[drinkInput3] = Integer.parseInt(am3)
+            ingredients[drinkInput4] = Integer.parseInt(am4)
+            extraIngredients["Lemon"] = 1
+            val newCocktail = Cocktail(drinkName.text.toString(), ingredients, extraIngredients, R.drawable.defaultdrinkimage)
+            cocktailViewModel.addNewCocktail(newCocktail)
+            Log.d("CocktailViewmodel info", "New cocktail added in the list: ${cocktailViewModel.cocktailList}")
         }
 
         return view
@@ -205,32 +236,4 @@ class Profile : Fragment(){
         }
     }
 
-    private fun addNewCocktail() {
-        val cocktailViewModel = ViewModelProvider(requireActivity()).get(CustomCocktailsViewModel::class.java)
-        //val normalIngerdients = MutableList<String, Int>()
-        //val specialIngredients = MutableList<String, Int>()
-/*        val newCocktail = NewCocktail(
-            "t", null, "", 0
-        )*/
-
-    }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Profile.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Profile().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
