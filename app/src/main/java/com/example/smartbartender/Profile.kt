@@ -1,5 +1,8 @@
 package com.example.smartbartender
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
@@ -21,13 +25,8 @@ import okhttp3.Request
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private val inputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amarreto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
+private val inputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amaretto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Profile.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Profile : Fragment(){
     // TODO: Rename and change types of parameters
 
@@ -77,9 +76,16 @@ class Profile : Fragment(){
             ingredients[drinkInput2] = Integer.parseInt(am2)
             ingredients[drinkInput3] = Integer.parseInt(am3)
             ingredients[drinkInput4] = Integer.parseInt(am4)
-            extraIngredients["Lemon"] = 1
             val newCocktail = Cocktail(drinkName.text.toString(), ingredients, extraIngredients, R.drawable.defaultdrinkimage)
-            cocktailViewModel.addNewCocktail(newCocktail)
+            val isAdded = cocktailViewModel.addNewCocktail(newCocktail)
+            if (isAdded){
+                val succesFragment = SuccesfullDialogFragment()
+                succesFragment.show(requireActivity().supportFragmentManager, "succes_dialog")
+            } else {
+                val errorDialog = ErrorDialogFragment()
+                errorDialog.show(requireActivity().supportFragmentManager, "error_dialog")
+            }
+
             Log.d("CocktailViewmodel info", "New cocktail added in the list: ${cocktailViewModel.cocktailList}")
         }
 
@@ -234,6 +240,45 @@ class Profile : Fragment(){
             val result = deferredResult.await()
             // Process the result or use it as needed
         }
+    }
+
+}
+
+class ErrorDialogFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = AlertDialog.Builder(requireContext(), R.style.RedErrorDialogTheme)
+        return builder
+            .setTitle("Error")
+            .setMessage("Total quantity exceeds 200. Cocktail not added.")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+    }
+}
+
+class SuccesfullDialogFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = AlertDialog.Builder(requireContext(), R.style.SuccesDialogTheme)
+        return builder
+            .setTitle("Succes")
+            .setMessage("Your custom cocktail has been added.")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+                //onOkButtonClicked()
+            }
+            .create()
+    }
+
+    @SuppressLint("ResourceType")
+    fun onOkButtonClicked() {
+        // Handle the OK button click (navigate to the home fragment)
+        // You can replace this with your navigation logic
+        val fragmentManager = requireFragmentManager()
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.layout.fragment_addcocktail, Home())
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
 }

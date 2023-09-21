@@ -149,9 +149,14 @@
             android:text="ML"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:text="The combined amount of ML can't exceed 200ML"/>
     <Button
         android:id="@+id/addConfirmButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Add Cocktail" />
 </LinearLayout>

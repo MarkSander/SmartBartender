@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var settings = Settings()
-        replaceFragment(Home(settings))
+        //replaceFragment(Home(settings))
+        replaceFragment(Home())
         //setContentView(R.layout.activity_main)
 
 /*        val btn: Button = findViewById(R.id.btn_frag)
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.home -> replaceFragment(Home(settings))
+                R.id.home -> replaceFragment(Home())
                 R.id.profile -> replaceFragment(Profile())
                 R.id.settings -> replaceFragment(settings)
 

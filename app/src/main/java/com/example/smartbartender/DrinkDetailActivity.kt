@@ -21,11 +21,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONObject
 
+var detailDrinkInput1 = ""
+var detailDrinkInput2 = ""
+var detailDrinkInput3 = ""
+var detailDrinkInput4 = ""
 class DrinkDetailActivity : AppCompatActivity() {
     private lateinit var drinksViewModel: DrinksViewModel
     // Access appPreferences in your activities or fragments
     private lateinit var appPreferences: AppPreferences
+    private val rasberryHttpRequests = RasberryHttpRequests()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +44,7 @@ class DrinkDetailActivity : AppCompatActivity() {
         setContentView(R.layout.detail_fragment)
         appPreferences = (applicationContext as MyApplication).appPreferences
         drinksViewModel = ViewModelProvider(this).get(DrinksViewModel::class.java)
+        rasberryHttpRequests.sendDrinkDetailHttpRequestAsync()
 
         // Access ViewModel properties
 // Retrieve the saved drinkInput values from SharedPreferences
@@ -44,6 +52,7 @@ class DrinkDetailActivity : AppCompatActivity() {
         val pump2 = appPreferences.getDrinkInput("drinkInput2", "Empty")
         val pump3 = appPreferences.getDrinkInput("drinkInput3", "Empty")
         val pump4 = appPreferences.getDrinkInput("drinkInput4", "Empty")
+
 
         // Retrieve the drink information from the intent
         val drinkName = intent.getStringExtra("drinkName")
@@ -66,12 +75,12 @@ class DrinkDetailActivity : AppCompatActivity() {
                 // Iterate through the map and concatenate the values
                 for ((ingredientName, ingredientValue) in drinkIngredients) {
                     when (ingredientName) {
-                        pump1 -> pump1Value = ingredientValue
-                        pump2 -> pump2Value = ingredientValue
-                        pump3 -> pump3Value = ingredientValue
-                        pump4 -> pump4Value = ingredientValue
+                        detailDrinkInput1 -> pump1Value = ingredientValue
+                        detailDrinkInput2 -> pump2Value = ingredientValue
+                        detailDrinkInput3 -> pump3Value = ingredientValue
+                        detailDrinkInput4 -> pump4Value = ingredientValue
                         else -> {
-                            Log.e("Match Error", "Ingredient $ingredientName did not match any pump value")
+                            Log.e("Match Error", "Ingredient $ingredientName did not match any pump value, pump2: $detailDrinkInput2")
                             // Handle the case where the ingredient doesn't match any pump
                         }
                     }
@@ -83,7 +92,7 @@ class DrinkDetailActivity : AppCompatActivity() {
 
                 Log.i("Info", "Request being send to pump api localhost/$pump1Value/$pump2Value/$pump3Value/$pump4Value")
                 //TODO Decomment below if connected to rasberry
-                val result = sendHttpRequestAsync(pump1Value, pump2Value, pump3Value, pump4Value)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(pump1Value, pump2Value, pump3Value, pump4Value)
 
                 // Check if the result contains "Finished"
                 if (result == "Finished") {
@@ -132,8 +141,8 @@ class DrinkDetailActivity : AppCompatActivity() {
         // Add more code to populate other UI components with additional drink details
     }
 
-    private fun sendHttpRequestAsync(pump1: Int, pump2: Int, pump3: Int, pump4: Int): String? {
-        val url = "http://192.168.234.144:5000/$pump1/$pump2/$pump3/$pump4"
+    private fun sendDrinkHttpRequestAsync(pump1: Int, pump2: Int, pump3: Int, pump4: Int): String? {
+        val url = "http://192.168.233.144:5000/$pump1/$pump2/$pump3/$pump4"
 
         // Use runBlocking to launch a coroutine for the network request
         return runBlocking {
@@ -162,6 +171,43 @@ class DrinkDetailActivity : AppCompatActivity() {
             val result = deferredResult.await()
             // Process the result or use it as needed
             result
+        }
+    }
+
+    private fun sendDrinkDetailHttpRequestAsync() {
+        val url = "http://192.168.68.75:5000/pumprequest/"
+
+        // Use runBlocking to launch a coroutine for the network request
+        runBlocking {
+            val deferredResult = async(Dispatchers.IO) {
+                val client = OkHttpClient()
+                val request = Request.Builder()
+                    .url(url)
+                    .build()
+
+                try {
+                    val response = client.newCall(request).execute()
+                    // Handle the response as needed
+                    val responseBody = response.body?.string()
+                    // Process the response data here
+                    Log.d("HttpRequest", "Response body received: $responseBody")
+
+                    // Return the result if needed
+                    responseBody
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    // Handle the exception
+                    null // Return null in case of an error
+                }
+            }
+
+            // You can use await to get the result later if needed
+            val result = deferredResult.await()
+            val jsonObject= JSONObject(result)
+            drinkInput1 = jsonObject.optString("pump1drink", "Empty")
+            drinkInput2 = jsonObject.optString("pump2drink", "Empty")
+            drinkInput3 = jsonObject.optString("pump3drink", "Empty")
+            drinkInput4 = jsonObject.optString("pump4drink", "Empty")
         }
     }
 

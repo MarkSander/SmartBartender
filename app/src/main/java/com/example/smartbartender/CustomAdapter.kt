@@ -33,12 +33,6 @@ class CustomAdapter(private val context: Context, private val cocktails: List<Co
         val icon = view!!.findViewById<ImageView>(R.id.drinkGridImage)
         val drinkText = view!!.findViewById<TextView>(R.id.drinkGridText)
 
-        /*val transitionName = "transitionName_$position"
-        Log.e("Transition", "TransitionName = $transitionName")
-        Log.e("Icon", "Iconview = $icon")
-        ViewCompat.setTransitionName(icon, transitionName)*/
-        // Assuming Cocktailinterface has a method to get the image resource ID, replace
-        // 'getIconResource()' with the appropriate method in your interface.
         icon.setImageResource(cocktails[position].imageResourceId)
         drinkText.text = cocktails[position].name
 

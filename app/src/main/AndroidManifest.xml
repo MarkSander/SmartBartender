@@ -30,6 +30,10 @@
             android:label="Drink Detail Activity">
             <!-- Add any other activity-related attributes here -->
         </activity>
+        <activity
+            android:name=".ServerDownActivity"
+            android:label="Server Down Activity">
+        </activity>
     </application>
 
 </manifest>

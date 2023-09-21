@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="RedErrorDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@color/red</item> <!-- Background color -->
+        <item name="android:textColorPrimary">@android:color/black</item> <!-- Text color -->
+        <item name="colorAccent">@color/red</item> <!-- Button and accent color -->
+        <item name="android:buttonBarButtonStyle">@style/RedDialogButton</item>
+    </style>
+
+    <style name="RedDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@android:color/black</item> <!-- Text color of the button -->
+        <item name="android:background">@color/red</item> <!-- Background color of the button -->
+    </style>
+
+    <style name="SuccesDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@color/green</item> <!-- Background color -->
+        <item name="android:textColorPrimary">@android:color/black</item> <!-- Text color -->
+        <item name="colorAccent">@color/green</item> <!-- Button and accent color -->
+        <item name="android:buttonBarButtonStyle">@style/RedDialogButton</item>
+    </style>
+</resources>

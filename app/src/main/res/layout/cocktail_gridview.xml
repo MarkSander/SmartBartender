@@ -20,7 +20,7 @@
         android:id="@+id/empty_state_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Please select inputs"
+        android:text="No cocktails found with current inputs"
         android:gravity="center"
         android:textSize="18sp"
         android:visibility="gone" />

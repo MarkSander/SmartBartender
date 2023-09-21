@@ -35,16 +35,17 @@ import org.json.JSONObject
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private val inputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amarreto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
-private var selectedDrinkPosition1 = 0 // Default to the first item
-private var selectedDrinkPosition2 = 0 // Default to the first item
-private var selectedDrinkPosition3 = 0 // Default to the first item
-private var selectedDrinkPosition4 = 0 // Default to the first item
+val settingsInputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amaretto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
+var selectedDrinkPosition1 = 0 // Default to the first item
+var selectedDrinkPosition2 = 0 // Default to the first item
+var selectedDrinkPosition3 = 0 // Default to the first item
+var selectedDrinkPosition4 = 0 // Default to the first item
 //val drinksViewModel: DrinksViewModel by viewModels()
 var drinkInput1 = ""
 var drinkInput2 = ""
 var drinkInput3 = ""
 var drinkInput4 = ""
+val rasberryHttpRequests = RasberryHttpRequests()
 
 
 /**
@@ -111,21 +112,21 @@ class Settings : Fragment() {
         val fill2 = view.findViewById<Button>(R.id.fill2)
         val fill3 = view.findViewById<Button>(R.id.fill3)
         val fill4 = view.findViewById<Button>(R.id.fill4)
-        sendHttpRequestAsync()
+        //sendHttpRequestAsync()
+        rasberryHttpRequests.sendHttpRequestAsync()
 
         flush1.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(10,0,0,0)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(100,0,0,0)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
                 }
             }
         }
-
         flush2.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(0,10,0,0)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(0,100,0,0)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -134,7 +135,7 @@ class Settings : Fragment() {
         }
         flush3.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(0,0,10,0)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(0,0,100,0)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -143,7 +144,7 @@ class Settings : Fragment() {
         }
         flush4.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(0,0,0,10)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(0,0,0,100)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -152,7 +153,7 @@ class Settings : Fragment() {
         }
         fill1.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(2,0,0,0)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(30,0,0,0)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -161,7 +162,7 @@ class Settings : Fragment() {
         }
         fill2.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(0,2,0,0)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(0,30,0,0)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -170,7 +171,7 @@ class Settings : Fragment() {
         }
         fill3.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(0,0,2,0)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(0,0,50,0)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -179,7 +180,7 @@ class Settings : Fragment() {
         }
         fill4.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO) {
-                val result = sendFillAndFlushHttpRequestAsync(0,0,0,2)
+                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(0,0,0,50)
                 if (result == "Finished") {
                 } else {
                     Log.e("Sending Request", "No Response named Finished was found")
@@ -190,7 +191,7 @@ class Settings : Fragment() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                inputDrinks
+                settingsInputDrinks
             )
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -207,10 +208,8 @@ class Settings : Fragment() {
                     id: Long
                 ) {
                     selectedDrinkPosition1 = position
-                    drinkInput1 = inputDrinks[position]
-                    sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
-                    //appPreferences.saveDrinkInput("drinkInput1", drinkInput1)
-                    //drinksViewModel.drinkInput1.value = drinkInput1
+                    drinkInput1 = settingsInputDrinks[position]
+                    rasberryHttpRequests.sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
                     Log.d("SettingsFragment", "drinkInput1 updated to: ${appPreferences.getDrinkInput("drinkInput1", "Empty")}")
                 }
 
@@ -224,7 +223,7 @@ class Settings : Fragment() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                inputDrinks
+                settingsInputDrinks
             )
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -241,8 +240,8 @@ class Settings : Fragment() {
                     id: Long
                 ) {
                     selectedDrinkPosition2 = position
-                    drinkInput2 = inputDrinks[position]
-                    sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
+                    drinkInput2 = settingsInputDrinks[position]
+                    rasberryHttpRequests.sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
                     //appPreferences.saveDrinkInput("drinkInput2", drinkInput2)
                     //drinksViewModel.drinkInput2.value = drinkInput2
                 }
@@ -257,7 +256,7 @@ class Settings : Fragment() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                inputDrinks
+                settingsInputDrinks
             )
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -274,8 +273,8 @@ class Settings : Fragment() {
                     id: Long
                 ) {
                     selectedDrinkPosition3 = position
-                    drinkInput3 = inputDrinks[position]
-                    sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
+                    drinkInput3 = settingsInputDrinks[position]
+                    rasberryHttpRequests.sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
                     //appPreferences.saveDrinkInput("drinkInput3", drinkInput3)
                     //drinksViewModel.drinkInput3.value = drinkInput3
                 }
@@ -290,7 +289,7 @@ class Settings : Fragment() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                inputDrinks
+                settingsInputDrinks
             )
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -307,10 +306,9 @@ class Settings : Fragment() {
                     id: Long
                 ) {
                     selectedDrinkPosition4 = position
-                    drinkInput4 = inputDrinks[position]
-                    sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
-                    //appPreferences.saveDrinkInput("drinkInput4", drinkInput4)
-                    //drinksViewModel.drinkInput4.value = drinkInput4
+                    drinkInput4 = settingsInputDrinks[position]
+                    rasberryHttpRequests.sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
+                    //sendNewPumpHttpRequestAsync(drinkInput1, drinkInput2, drinkInput3, drinkInput4)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -322,18 +320,8 @@ class Settings : Fragment() {
 
     }
 
-/*
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is SpinnerItemSelectedListener) {
-            spinnerItemSelectedListener = context
-        } else {
-            throw RuntimeException("$context must implement SpinnerItemSelectedListener")
-        }
-    }
-*/
     private fun sendHttpRequestAsync() {
-    val url = "http://192.168.68.74:5000/pumprequest/"
+    val url = "http://192.168.233.144:5000/pumprequest/"
 
     // Use runBlocking to launch a coroutine for the network request
     runBlocking {
@@ -363,18 +351,18 @@ class Settings : Fragment() {
         val result = deferredResult.await()
         val jsonObject= JSONObject(result)
         drinkInput1 = jsonObject.optString("pump1drink", "Empty")
-        selectedDrinkPosition1 = inputDrinks.indexOf(drinkInput1)
+        selectedDrinkPosition1 = settingsInputDrinks.indexOf(drinkInput1)
         drinkInput2 = jsonObject.optString("pump2drink", "Empty")
-        selectedDrinkPosition2 = inputDrinks.indexOf(drinkInput2)
+        selectedDrinkPosition2 = settingsInputDrinks.indexOf(drinkInput2)
         drinkInput3 = jsonObject.optString("pump3drink", "Empty")
-        selectedDrinkPosition3 = inputDrinks.indexOf(drinkInput3)
+        selectedDrinkPosition3 = settingsInputDrinks.indexOf(drinkInput3)
         drinkInput4 = jsonObject.optString("pump4drink", "Empty")
-        selectedDrinkPosition4 = inputDrinks.indexOf(drinkInput4)
+        selectedDrinkPosition4 = settingsInputDrinks.indexOf(drinkInput4)
 
     }
 }
     private fun sendNewPumpHttpRequestAsync(pump1: String, pump2: String, pump3: String, pump4: String) {
-        val url = "http://192.168.68.74:5000/pumpchange/"
+        val url = "http://192.168.233.144:5000/pumpchange/"
 
         // Use runBlocking to launch a coroutine for the network request
         runBlocking {
@@ -386,15 +374,6 @@ class Settings : Fragment() {
                     put("pump3", pump3)
                     put("pump4", pump4)
                 }
-
-/*                val json = """
-        {
-            "pump1": $pump1,
-            "pump2": $pump2,
-            "pump3": $pump3,
-            "pump4": $pump4
-        }
-    """.trimIndent()*/
                 val requestBody = json.toString().toRequestBody("application/json".toMediaType())
                 val request = Request.Builder()
                     .url(url)
@@ -432,7 +411,7 @@ class Settings : Fragment() {
     }
 
     private fun sendFillAndFlushHttpRequestAsync(pump1: Int, pump2: Int, pump3: Int, pump4: Int): String? {
-        val url = "http://192.168.68.74:5000/$pump1/$pump2/$pump3/$pump4"
+        val url = "http://192.168.233.144:5000/$pump1/$pump2/$pump3/$pump4"
 
         // Use runBlocking to launch a coroutine for the network request
         return runBlocking {
@@ -485,7 +464,3 @@ class Settings : Fragment() {
     }
 }
 
-/*
-interface SpinnerItemSelectedListener {
-    fun onSpinnerItemSelected(selectedItem: String)
-}*/
