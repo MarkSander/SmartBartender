@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- drink_detail_layout.xml -->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:text="Delete Drink"
+            android:layout_gravity="right"
+            />
+
+        <ImageView
+            android:id="@+id/drinkImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:transitionName="drinkImageTransition"/>
+
+        <TextView
+            android:id="@+id/drinkName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="16dp"/>
+        <TextView
+            android:id="@+id/drinkIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="16dp"/>
+        <TextView
+            android:id="@+id/extraDrinkIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="16dp"/>
+        <Button
+            android:id="@+id/pourDrinkButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pour drink" />
+
+        <!-- Add more TextViews or other UI components for drink details as needed -->
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

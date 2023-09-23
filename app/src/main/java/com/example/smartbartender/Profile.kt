@@ -3,6 +3,7 @@ package com.example.smartbartender
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -265,20 +266,10 @@ class SuccesfullDialogFragment : DialogFragment() {
             .setMessage("Your custom cocktail has been added.")
             .setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
-                //onOkButtonClicked()
+                val intent = Intent(activity, MainActivity()::class.java)
+                startActivity(intent)
             }
             .create()
-    }
-
-    @SuppressLint("ResourceType")
-    fun onOkButtonClicked() {
-        // Handle the OK button click (navigate to the home fragment)
-        // You can replace this with your navigation logic
-        val fragmentManager = requireFragmentManager()
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.layout.fragment_addcocktail, Home())
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 
 }

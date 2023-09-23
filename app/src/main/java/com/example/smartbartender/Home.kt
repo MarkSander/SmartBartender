@@ -1,6 +1,7 @@
 package com.example.smartbartender
 
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.widget.AdapterView
 import android.widget.GridView
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -72,6 +74,7 @@ class Home() : Fragment() {
     private val cocktailViewModel by lazy {
         ViewModelProvider(requireActivity()).get(CocktailViewModel::class.java)
     }
+    private lateinit var clickedImageView: ImageView
     //val cocktailViewModel: CocktailViewModel by viewModels()
 
 
@@ -188,29 +191,35 @@ class Home() : Fragment() {
                     val clickedDrink = filteredCocktailList[position]
                     val clickedDrinkIngredients = clickedDrink.ingredients
                     val clickedDrinkExtraIngredients = clickedDrink.extraIngredients
-                    val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
+                    val intent = Intent(activity, DrinkDetailActivity::class.java)
+                    //val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
+
 
                     intent.putExtra("drinkName", clickedDrink.name)
                     intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
                     intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
                     intent.putExtra("extraIngredients", HashMap(clickedDrinkExtraIngredients))
+                    val imgTransition = view.findViewById<ImageView>(R.id.drinkGridImage)
+                    Log.d("Imageview", "Imageview found: $imgTransition")
+                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, imgTransition, "drinkImageTransition")
                     //startActivity(intent, options.toBundle())
-                    startActivity(intent)
+                    startActivity(intent, options.toBundle())
                 })
-                simpleCustomCocktailGrid.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, position, _ ->
-                    // Handle item click here, for example, navigate to the detail view
-                    val clickedDrink = customMadeDrinks[position]
-                    val clickedDrinkIngredients = clickedDrink.ingredients
-                    val clickedDrinkExtraIngredients = clickedDrink.extraIngredients
-                    val intent = Intent(requireContext(), DrinkDetailActivity::class.java)
+                simpleCustomCocktailGrid.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        // Handle item click here, for example, navigate to the detail view
+                        val clickedDrink = customMadeDrinks[position]
+                        val clickedDrinkIngredients = clickedDrink.ingredients
+                        val clickedDrinkExtraIngredients = clickedDrink.extraIngredients
+                        val intent = Intent(requireContext(), DrinkCustomDetailActivity::class.java)
 
-                    intent.putExtra("drinkName", clickedDrink.name)
-                    intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
-                    intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
-                    intent.putExtra("extraIngredients", HashMap(clickedDrinkExtraIngredients))
-                    //startActivity(intent, options.toBundle())
-                    startActivity(intent)
-                })
+                        intent.putExtra("drinkName", clickedDrink.name)
+                        intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
+                        intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
+                        intent.putExtra("extraIngredients", HashMap(clickedDrinkExtraIngredients))
+                        //startActivity(intent, options.toBundle())
+                        startActivity(intent)
+                    }
             } catch (e: Exception){
                 Log.e("HTTP Error", "Cant connect to the rasberry")
                 displayServerError()

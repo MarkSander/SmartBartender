@@ -28,11 +28,20 @@
         <activity
             android:name=".DrinkDetailActivity"
             android:label="Drink Detail Activity">
+            <!--android:theme="@style/TransAnimation"-->
             <!-- Add any other activity-related attributes here -->
+        </activity>
+        <activity
+            android:name=".DrinkCustomDetailActivity"
+            android:label="Drink detail for custom cocktails">
         </activity>
         <activity
             android:name=".ServerDownActivity"
             android:label="Server Down Activity">
+        </activity>
+        <activity
+            android:name=".ExtraIngredientsActivity"
+            android:label="Extra ingredients Activity">
         </activity>
     </application>
 

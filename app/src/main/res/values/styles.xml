@@ -18,4 +18,12 @@
         <item name="colorAccent">@color/green</item> <!-- Button and accent color -->
         <item name="android:buttonBarButtonStyle">@style/RedDialogButton</item>
     </style>
+    <style name="TransAnimation" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/change_image_transform</item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/change_image_transform</item>
+    </style>
 </resources>
