@@ -10,6 +10,7 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -60,6 +61,16 @@ class CocktailViewModel() : ViewModel() {
         }
         return false
         //saveCocktailList()
+    }
+
+    suspend fun removeCocktail(position: Int){
+        cocktailList.removeAt(position)
+
+        Log.d("Delete Cocktail", "Cocktail lists updated: $cocktailList")
+        Log.d("Delete Cocktail", "Cocktail deleted at position: $position")
+        withContext(Dispatchers.Main){
+            rasberryHttpRequests.sendNewCocktailListHttpRequestAsync(cocktailList)
+        }
     }
 
     private fun CocktailInterface.filterNonEmptyIngredients(): MutableMap<String, Int> {

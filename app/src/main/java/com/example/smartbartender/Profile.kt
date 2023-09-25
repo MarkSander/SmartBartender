@@ -56,10 +56,6 @@ class Profile : Fragment(){
         amount2.filters = arrayOf(InputFilterMinMax("0", "200"))
         amount3.filters = arrayOf(InputFilterMinMax("0", "200"))
         amount4.filters = arrayOf(InputFilterMinMax("0", "200"))
-        amount1.setText("0")
-        amount2.setText("0")
-        amount3.setText("0")
-        amount4.setText("0")
 
         cocktailViewModel = ViewModelProvider(requireActivity()).get(CocktailViewModel::class.java)
 
@@ -73,10 +69,18 @@ class Profile : Fragment(){
             val am3: String = amount3.text.toString()
             val am4: String = amount4.text.toString()
             Log.d("Drink input", "Drink input1: $drinkInput1")
-            ingredients[drinkInput1] = Integer.parseInt(am1)
-            ingredients[drinkInput2] = Integer.parseInt(am2)
-            ingredients[drinkInput3] = Integer.parseInt(am3)
-            ingredients[drinkInput4] = Integer.parseInt(am4)
+            if (am1 != ""){
+                ingredients[drinkInput1] = Integer.parseInt(am1)
+            }
+            if (am2 != ""){
+                ingredients[drinkInput2] = Integer.parseInt(am2)
+            }
+            if (am3 != ""){
+                ingredients[drinkInput3] = Integer.parseInt(am3)
+            }
+            if (am4 != ""){
+                ingredients[drinkInput4] = Integer.parseInt(am4)
+            }
             val newCocktail = Cocktail(drinkName.text.toString(), ingredients, extraIngredients, R.drawable.defaultdrinkimage)
             val isAdded = cocktailViewModel.addNewCocktail(newCocktail)
             if (isAdded){

@@ -73,12 +73,12 @@ class RasberryHttpRequests{
 
                     // Return the result if needed
                     if (response.isSuccessful) {
-                        val responseBody = response.body?.string()
+                        val responseBody = response.body?.use { it.string() }
                         // Process the response body
                     } else {
                         // Handle the error
                         println("HTTP Error: ${response.code}")
-                        println("Error Message: ${response.body?.string()}")
+                        println("Error Message: ${responseBody}")
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -93,47 +93,47 @@ class RasberryHttpRequests{
         }
     }
 
-    suspend fun sendHttpCocktailListRequestAsync(): List<CocktailInterface>? {
-        val newUrl = "$url/cocktailrequest/"
-        return withContext(Dispatchers.IO) {
-            try {
-                val client = OkHttpClient()
-                val request = Request.Builder()
-                    .url(newUrl)
-                    .build()
+        suspend fun sendHttpCocktailListRequestAsync(): List<CocktailInterface>? {
+            val newUrl = "$url/cocktailrequest/"
+            return withContext(Dispatchers.IO) {
+                try {
+                    val client = OkHttpClient()
+                    val request = Request.Builder()
+                        .url(newUrl)
+                        .build()
 
-                val response = client.newCall(request).execute()
+                    val response = client.newCall(request).execute()
 
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    Log.d("HttpRequest", "Response body received: $responseBody")
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        Log.d("HttpRequest", "Response body received: $responseBody")
 
-                    // Parse the JSON response into a List<Cocktail>
-                    val gson = Gson()
-                    val cocktailList: List<Cocktail>? = gson.fromJson(
-                        responseBody,
-                        object : TypeToken<List<Cocktail>>() {}.type
-                    )
+                        // Parse the JSON response into a List<Cocktail>
+                        val gson = Gson()
+                        val cocktailList: List<Cocktail>? = gson.fromJson(
+                            responseBody,
+                            object : TypeToken<List<Cocktail>>() {}.type
+                        )
 
-                    // Convert List<Cocktail> to List<CocktailInterface>
-                    cocktailList?.map { cocktail ->
-                        Cocktail(
-                            name = cocktail.name,
-                            imageResourceId = cocktail.imageResourceId,
-                            ingredients = cocktail.ingredients.toMutableMap(),
-                            extraIngredients = cocktail.extraIngredients.toMutableMap()
-                        ) as CocktailInterface
+                        // Convert List<Cocktail> to List<CocktailInterface>
+                        cocktailList?.map { cocktail ->
+                            Cocktail(
+                                name = cocktail.name,
+                                imageResourceId = cocktail.imageResourceId,
+                                ingredients = cocktail.ingredients.toMutableMap(),
+                                extraIngredients = cocktail.extraIngredients.toMutableMap()
+                            ) as CocktailInterface
+                        }
+                    } else {
+                        Log.e("HttpRequest", "Failed to retrieve data: ${response.code}")
+                        null
                     }
-                } else {
-                    Log.e("HttpRequest", "Failed to retrieve data: ${response.code}")
+                } catch (e: Exception) {
+                    e.printStackTrace()
                     null
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
             }
         }
-    }
 
     fun JSONArray.toMutableList(): MutableList<Any> = MutableList(length(), this::get)
     // Function to parse the JSON response and convert it to a list of CocktailInterface

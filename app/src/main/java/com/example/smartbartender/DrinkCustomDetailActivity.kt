@@ -5,12 +5,15 @@ import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -25,6 +28,7 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
     // Access appPreferences in your activities or fragments
     private lateinit var appPreferences: AppPreferences
     private val rasberryHttpRequests = RasberryHttpRequests()
+    private lateinit var cocktailViewModel: CocktailViewModel
 
 
 
@@ -38,6 +42,7 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
         appPreferences = (applicationContext as MyApplication).appPreferences
         drinksViewModel = ViewModelProvider(this).get(DrinksViewModel::class.java)
         rasberryHttpRequests.sendDrinkDetailHttpRequestAsync()
+        cocktailViewModel = ViewModelProvider(this)[CocktailViewModel::class.java]
 
         // Access ViewModel properties
 // Retrieve the saved drinkInput values from SharedPreferences
@@ -52,6 +57,7 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
         val drinkImageResource = intent.getIntExtra("drinkImageResource", 0)
         val drinkIngredients = intent.getSerializableExtra("drinkIngredients") as? MutableMap<String, Int>
         val extraIngredients = intent.getSerializableExtra("extraIngredients") as? MutableMap<String, Int>
+        val positionInList = intent.getIntExtra("positionInList", -1)
 
 // Now you have the individual data points to populate your UI components
 
@@ -59,6 +65,7 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
         val drinkImageView = findViewById<ImageView>(R.id.drinkImage)
         val drinkNameView = findViewById<TextView>(R.id.drinkName)
         val pourButton = findViewById<Button>(R.id.pourDrinkButton)
+        val deleteButton = findViewById<Button>(R.id.deleteButton)
         pourButton.setOnClickListener {
             var pump1Value = 0
             var pump2Value = 0
@@ -84,24 +91,31 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
 
                 Log.i("Info", "Request being send to pump api localhost/$pump1Value/$pump2Value/$pump3Value/$pump4Value")
-                val result = rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(pump1Value, pump2Value, pump3Value, pump4Value)
+                val loadingLayout = findViewById<View>(R.id.loading_layout)
+                val finishedlayout = findViewById<View>(R.id.finished_layout)
+                runOnUiThread {
+                    loadingLayout.visibility = View.VISIBLE
+                }
+                rasberryHttpRequests.sendFillAndFlushHttpRequestAsync(pump1Value, pump2Value, pump3Value, pump4Value)
+/*                runOnUiThread{
+                    loadingLayout.visibility = View.GONE
+                }*/
 
-                // Check if the result contains "Finished"
-                if (result == "Finished") {
-                    //TODO Create function to switch to a new view containing the extra ingredients
                     if(extraIngredients != null){
                         if (extraIngredients.isNotEmpty()){
                             val intent = Intent(applicationContext, ExtraIngredientsActivity::class.java)
                             intent.putExtra("extraIngredients", HashMap(extraIngredients))
                             Log.d("Start Activity", "Starting a new ExtraIngredientsActivity")
                             startActivity(intent)
+                        } else {
+                            val intent = Intent(applicationContext, FinishedActivity::class.java)
+                            startActivity(intent)
                         }
                     }
-                } else {
-                    Log.e("Sending Request", "No Response named Finished was found")
-                }
-
             }
+        }
+        deleteButton.setOnClickListener {
+            showDeleteConfirmationDialog(positionInList)
         }
         val ingredientsText = StringBuilder()
         ingredientsText.append("Ingredients:\n")
@@ -133,5 +147,25 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
         textView.text = ingredientsText.toString()
 
         // Add more code to populate other UI components with additional drink details
+    }
+    private fun showDeleteConfirmationDialog(position: Int) {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Confirm Deletion")
+        alertDialogBuilder.setMessage("Are you sure you want to delete this cocktail?")
+        alertDialogBuilder.setPositiveButton("Yes") { dialog, _ ->
+            // User clicked Yes, remove the cocktail
+            lifecycleScope.launch(Dispatchers.IO) {
+                cocktailViewModel.removeCocktail(position)
+            }
+            dialog.dismiss()
+            val intent = Intent(this, MainActivity()::class.java)
+            startActivity(intent)
+        }
+        alertDialogBuilder.setNegativeButton("No") { dialog, _ ->
+            // User clicked No, do nothing
+            dialog.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 }

@@ -43,6 +43,10 @@
             android:name=".ExtraIngredientsActivity"
             android:label="Extra ingredients Activity">
         </activity>
+        <activity
+            android:name=".FinishedActivity"
+            android:label="Finished pouring cocktail activity">
+        </activity>
     </application>
 
 </manifest>

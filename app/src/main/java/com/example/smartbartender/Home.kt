@@ -163,7 +163,7 @@ class Home() : Fragment() {
                         filteredCocktailList.add(cocktail)
                         Log.d(
                             "Cocktail filtered",
-                            "New Cocktail added to filterred list: $cocktail List now contais: $filteredCocktailList"
+                            "New Cocktail added to filtered list: $cocktail List now contains: $filteredCocktailList"
                         )
                     }
                 }
@@ -217,6 +217,7 @@ class Home() : Fragment() {
                         intent.putExtra("drinkImageResource", clickedDrink.imageResourceId)
                         intent.putExtra("drinkIngredients", HashMap(clickedDrinkIngredients))
                         intent.putExtra("extraIngredients", HashMap(clickedDrinkExtraIngredients))
+                        intent.putExtra("positionInList", position)
                         //startActivity(intent, options.toBundle())
                         startActivity(intent)
                     }
