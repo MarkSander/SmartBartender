@@ -10,7 +10,7 @@ class Hardseltzer : CocktailInterface {
     override val imageResourceId = R.drawable.hardseltzer
     init {
         ingredients["Vodka"] = 40
-        ingredients["Sparkling Water"] = 280
-        extraIngredients["Lemon"] = 1
+        ingredients["Sparkling Water"] = 160
+        extraIngredients["Ice"] = 3
     }
 }

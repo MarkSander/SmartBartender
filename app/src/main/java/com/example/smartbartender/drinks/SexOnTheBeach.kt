@@ -10,9 +10,9 @@ class SexOnTheBeach : CocktailInterface {
     override val imageResourceId = R.drawable.sexonthebeach
     init {
         ingredients["Vodka"] = 30
-        ingredients["Peach likeur"] = 15
-        ingredients["Sinaasappelsap"] = 60
-        ingredients["Cranberry sap"] = 50
+        ingredients["Peach Juice"] = 15
+        ingredients["Orange Juice"] = 60
+        ingredients["Cranberry Juice"] = 50
         extraIngredients["Orange"] = 1
         extraIngredients["Ice"] = 4
     }

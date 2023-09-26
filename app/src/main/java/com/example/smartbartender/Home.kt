@@ -20,13 +20,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartbartender.drinks.AmarettoSour
+import com.example.smartbartender.drinks.AmericanCocktail
 import com.example.smartbartender.drinks.Appletini
 import com.example.smartbartender.drinks.Bellini
 import com.example.smartbartender.drinks.BloodyMary
+import com.example.smartbartender.drinks.BlueLagoon
 import com.example.smartbartender.drinks.Coke
 import com.example.smartbartender.drinks.CubeLibre
 import com.example.smartbartender.drinks.Daiquiri
 import com.example.smartbartender.drinks.DarkandStormy
+import com.example.smartbartender.drinks.DisaronnoSour
 import com.example.smartbartender.drinks.DraculaKiss
 import com.example.smartbartender.drinks.GinTonic
 import com.example.smartbartender.drinks.Hardseltzer
@@ -35,8 +38,11 @@ import com.example.smartbartender.drinks.MoscowMule
 import com.example.smartbartender.drinks.Paloma
 import com.example.smartbartender.drinks.PinaColada
 import com.example.smartbartender.drinks.PornstarMartini
+import com.example.smartbartender.drinks.PortRoyalPunch
 import com.example.smartbartender.drinks.Screwdriver
 import com.example.smartbartender.drinks.SexOnTheBeach
+import com.example.smartbartender.drinks.SexintheDriveway
+import com.example.smartbartender.drinks.Sprite
 import com.example.smartbartender.drinks.Spritz
 import com.example.smartbartender.drinks.Vesper
 import com.example.smartbartender.drinks.VodkaParalyzer
@@ -139,7 +145,13 @@ class Home() : Fragment() {
                     Vesper(),
                     VodkaParalyzer(),
                     WhiskyandCoke(),
-                    WhiskySour()
+                    WhiskySour(),
+                    AmericanCocktail(),
+                    BlueLagoon(),
+                    DisaronnoSour(),
+                    PortRoyalPunch(),
+                    SexintheDriveway(),
+                    Sprite()
                     // Add other drinks here...
                 )
                 rasberryHttpRequests.sendHttpHomeViewRequestAsync()

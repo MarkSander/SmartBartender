@@ -7,7 +7,7 @@ class DraculaKiss : CocktailInterface {
     override val name: String = "Dracula's Kiss"
     override val ingredients: MutableMap<String, Int> = HashMap()
     override val extraIngredients: MutableMap<String, Int> = HashMap()
-    override val imageResourceId = R.drawable.draculaskiss
+    override val imageResourceId = R.drawable.draculakiss
     init {
         ingredients["Vodka"] = 60
         ingredients["Coke"] = 120

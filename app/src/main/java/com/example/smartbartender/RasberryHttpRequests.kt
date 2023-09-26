@@ -24,7 +24,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class RasberryHttpRequests{
-    private val url = "http://192.168.68.68:5000"
+    private val url = "http://192.168.108.144:5000"
 
     fun sendNewCocktailListHttpRequestAsync(newCocktailList: MutableList<CocktailInterface>) {
         val newUrl = "$url/cocktailsave/"

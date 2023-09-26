@@ -7,11 +7,12 @@ class PinaColada : CocktailInterface {
     override val name: String = "Pina Colada"
     override val ingredients: MutableMap<String, Int> = HashMap()
     override val extraIngredients: MutableMap<String, Int> = HashMap()
-    override val imageResourceId = R.drawable.pinacoladacocktail
+    override val imageResourceId = R.drawable.pinacolada
     init {
-        ingredients["Witte rum"] = 45
-        ingredients["Kokosmelk"] = 30
-        ingredients["Ananassap"] = 90
-        extraIngredients["Ananas"] = 1
+        ingredients["Rum"] = 50
+        ingredients["Kokos Water"] = 35
+        ingredients["Pineapple Juice"] = 35
+        extraIngredients["Pineapple"] = 1
+        extraIngredients["Sugar"] = 1
     }
 }

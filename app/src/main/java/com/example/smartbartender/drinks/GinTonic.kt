@@ -9,8 +9,8 @@ class GinTonic : CocktailInterface {
     override val extraIngredients: MutableMap<String, Int> = HashMap()
     override val imageResourceId = R.drawable.gintonic
     init {
-        ingredients["Gin"] = 45
-        ingredients["Tonic"] = 20
-        extraIngredients["Citroen"] = 1
+        ingredients["Gin"] = 10
+        ingredients["Tonic"] = 50
+        extraIngredients["Lemon"] = 1
     }
 }

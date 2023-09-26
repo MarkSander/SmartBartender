@@ -26,8 +26,8 @@ import okhttp3.Request
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private val inputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amaretto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
-
+private val inputDrink = listOf("Empty", "Whisky", "Rum", "Gin", "Amaretto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
+val inputDrinks = inputDrink.sortedWith(compareBy( { it != "Empty" }, { it }))
 class Profile : Fragment(){
     // TODO: Rename and change types of parameters
 

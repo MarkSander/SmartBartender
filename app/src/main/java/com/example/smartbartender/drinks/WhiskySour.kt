@@ -7,7 +7,7 @@ class WhiskySour : CocktailInterface {
     override val name: String = "Whisky Sour"
     override val ingredients: MutableMap<String, Int> = HashMap()
     override val extraIngredients: MutableMap<String, Int> = HashMap()
-    override val imageResourceId = R.drawable.whiskysour
+    override val imageResourceId = R.drawable.whiskeysour
     init {
         ingredients["Whisky"] = 60
         ingredients["Maple Syrup"] = 20

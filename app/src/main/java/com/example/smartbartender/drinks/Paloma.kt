@@ -11,6 +11,6 @@ class Paloma : CocktailInterface {
     init {
         ingredients["Tequilla"] = 40
         ingredients["Spa Grapefruit"] = 80
-        extraIngredients["Limoen"] = 2
+        extraIngredients["Lime"] = 2
     }
 }

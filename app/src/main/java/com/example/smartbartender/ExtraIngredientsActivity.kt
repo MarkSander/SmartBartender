@@ -28,7 +28,7 @@ class ExtraIngredientsActivity: AppCompatActivity() {
 
         textView.text = extraIngredientsText.toString()
         doneButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, FinishedActivity::class.java)
             startActivity(intent)
         }
     }

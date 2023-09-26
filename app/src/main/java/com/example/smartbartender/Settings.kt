@@ -35,7 +35,31 @@ import org.json.JSONObject
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-val settingsInputDrinks = listOf("Empty", "Whisky", "Rum", "Gin", "Amaretto", "Vodka", "Ginger Beer", "Maple Syrup", "Prosecco", "Coke", "Tonic", "Sparkling Water", "Tequilla", "Passoa", "Safari", "Orange Juice", "Aperol")
+val settingsInputDrink = listOf("Empty",
+    "Whisky",
+    "Rum",
+    "Gin",
+    "Amaretto",
+    "Vodka",
+    "Ginger Beer",
+    "Maple Syrup",
+    "Prosecco",
+    "Coke",
+    "Tonic",
+    "Sparkling Water",
+    "Tequilla",
+    "Passoa",
+    "Safari",
+    "Orange Juice",
+    "Aperol",
+    "Sprite",
+    "Peach Juice",
+    "Apple Juice",
+    "Lemon Juice",
+    "Cranberry Juice",
+    "Pineapple Juice",
+    "Blue Curacao")
+val settingsInputDrinks = settingsInputDrink.sortedWith(compareBy( { it != "Empty" }, { it }))
 var selectedDrinkPosition1 = 0 // Default to the first item
 var selectedDrinkPosition2 = 0 // Default to the first item
 var selectedDrinkPosition3 = 0 // Default to the first item

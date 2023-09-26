@@ -11,7 +11,7 @@ class Screwdriver : CocktailInterface {
     init {
         ingredients["Orange Juice"] = 100
         ingredients["Vodka"] = 50
-        extraIngredients["Lemon"] = 1
-        extraIngredients["Ice"] = 1
+        extraIngredients["Orange"] = 1
+        extraIngredients["Ice"] = 3
     }
 }

@@ -9,10 +9,10 @@ class Appletini : CocktailInterface {
     override val extraIngredients: MutableMap<String, Int> = HashMap()
     override val imageResourceId = R.drawable.appletini
     init {
-        ingredients["Vodka"] = 50
-        ingredients["Apple Juice"] = 50
-        ingredients["Maple Syrup"] = 50
-        extraIngredients["LemonJuice"] = 10
+        ingredients["Vodka"] = 60
+        ingredients["Apple Juice"] = 60
+        ingredients["Maple Syrup"] = 20
+        ingredients["Lemon Juice"] = 20
         extraIngredients["Apple"] = 1
     }
 }

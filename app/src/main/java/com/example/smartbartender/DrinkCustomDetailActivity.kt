@@ -66,6 +66,17 @@ class DrinkCustomDetailActivity : AppCompatActivity() {
         val drinkNameView = findViewById<TextView>(R.id.drinkName)
         val pourButton = findViewById<Button>(R.id.pourDrinkButton)
         val deleteButton = findViewById<Button>(R.id.deleteButton)
+        var canBeAdded = true
+        if (drinkIngredients != null) {
+            for (ing in drinkIngredients.keys) {
+                if (ing == homeInput1 || ing == homeInput2 || ing == homeInput3 || ing == homeInput4) {
+                    Log.d("FilterCocktail", "The ingredient $ing was found in the inputs")
+                } else {
+                    canBeAdded = false
+                }
+            }
+        }
+        pourButton.isEnabled = canBeAdded
         pourButton.setOnClickListener {
             var pump1Value = 0
             var pump2Value = 0

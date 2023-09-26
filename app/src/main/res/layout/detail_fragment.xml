@@ -27,17 +27,16 @@
             <!-- Your existing content here -->
             <ImageView
                 android:id="@+id/drinkImage"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:transitionName="gridTransition"/>
+                android:transitionName="gridTransition" />
 
             <TextView
                 android:id="@+id/drinkName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:padding="16dp"/>
+                android:padding="16dp" />
             <TextView
                 android:id="@+id/drinkIngredients"
                 android:layout_width="match_parent"

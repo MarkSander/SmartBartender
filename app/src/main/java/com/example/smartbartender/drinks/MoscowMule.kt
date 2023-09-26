@@ -9,10 +9,10 @@ class MoscowMule : CocktailInterface {
     override val extraIngredients: MutableMap<String, Int> = HashMap()
     override val imageResourceId = R.drawable.moscowmule
     init {
-        ingredients["Vodka"] = 50
-        ingredients["Ginger Beer"] = 250
-        extraIngredients["Lemon"] = 5
-        extraIngredients["Munt"] = 2
+        ingredients["Vodka"] = 40
+        ingredients["Ginger Beer"] = 150
+        extraIngredients["Lime"] = 2
+        extraIngredients["Munt"] = 1
         extraIngredients["Ice"] = 3
     }
 }

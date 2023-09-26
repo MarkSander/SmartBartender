@@ -8,6 +8,8 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class CustomAdapter(private val context: Context, private val cocktails: List<CocktailInterface>) : BaseAdapter() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -33,7 +35,10 @@ class CustomAdapter(private val context: Context, private val cocktails: List<Co
         val icon = view!!.findViewById<ImageView>(R.id.drinkGridImage)
         val drinkText = view!!.findViewById<TextView>(R.id.drinkGridText)
 
-        icon.setImageResource(cocktails[position].imageResourceId)
+        Glide.with(context).load(cocktails[position].imageResourceId)
+            .placeholder(R.drawable.defaultdrinkimage)
+            .error(R.drawable.defaultdrinkimage)
+            .into(icon)
         drinkText.text = cocktails[position].name
 
 

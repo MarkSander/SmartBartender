@@ -7,13 +7,12 @@ class PornstarMartini : CocktailInterface {
     override val name: String = "Pornstar Martini"
     override val ingredients: MutableMap<String, Int> = HashMap()
     override val extraIngredients: MutableMap<String, Int> = HashMap()
-    override val imageResourceId = R.drawable.pornstarmartinicocktail
+    override val imageResourceId = R.drawable.pornstarmartini
     init {
         ingredients["Vodka"] = 50
         ingredients["Passoa"] = 50
-        ingredients["Passievruchtsap"] = 100
-        extraIngredients["Limoen"] = 2
-        extraIngredients["Eiwit"] = 2
+        ingredients["Tropical Fruit Juice"] = 80
+        extraIngredients["Egg white"] = 1
         extraIngredients["Ice"] = 2
     }
 }

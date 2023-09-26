@@ -10,7 +10,7 @@ class VodkaParalyzer : CocktailInterface {
     override val imageResourceId = R.drawable.vodkaparalyzer
     init {
         ingredients["Vodka"] = 30
-        ingredients["Club Soda"] = 150
+        ingredients["Sprite"] = 150
         ingredients["Coke"] = 30
         extraIngredients["Ice"] = 3
     }
